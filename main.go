@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"myBoard/assets"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -17,27 +17,45 @@ func main() {
 	w.SetFullScreen(true)
 
 	buttons := []*widget.Button{
-		widget.NewButton("Youtube", func() {
+		widget.NewButtonWithIcon("Youtube", assets.GetIcon("youtube.svg"), func() {
 			log.Println("click Youtube")
 		}),
-		widget.NewButton("Plex", func() {
+		widget.NewButtonWithIcon("Plex", assets.GetIcon("plex.svg"), func() {
 			log.Println("click Plex")
 		}),
-		widget.NewButton("Plex", func() {
-			log.Println("click Plex")
-		}),
-		widget.NewButton("Yandex music", func() {
+		widget.NewButtonWithIcon("Yandex music", assets.GetIcon("yandex_music.svg"), func() {
 			log.Println("click Yandex music")
 		}),
-		widget.NewButton("Xeoma", func() {
+		widget.NewButtonWithIcon("Xeoma", assets.GetIcon("xeoma.jpg"), func() {
 			log.Println("click Xeoma")
 		}),
-		widget.NewButton("Firefox", func() {
+		widget.NewButtonWithIcon("Firefox", assets.GetIcon("Firefox.png"), func() {
 			log.Println("click firefox")
 		}),
+		// widget.NewButtonWithIcon("", assets.GetIcon("youtube.svg"), func() {
+		// 	log.Println("click Youtube")
+		// }),
 	}
 
-	grid := container.New(layout.NewAdaptiveGridLayout(3), buttons[0], buttons[1], buttons[2], buttons[3], buttons[4], buttons[5])
+	// buttons := []fyne.CanvasObject{
+	// 	widget.NewButtonWithIcon("Youtube", assets.GetIcon("youtube.svg"), func() {
+	// 		log.Println("click Youtube")
+	// 	}),
+	// 	widget.NewButtonWithIcon("Plex", assets.GetIcon("plex.svg"), func() {
+	// 		log.Println("click Plex")
+	// 	}),
+	// 	widget.NewButtonWithIcon("Yandex music", assets.GetIcon("yandex_music.svg"), func() {
+	// 		log.Println("click Yandex music")
+	// 	}),
+	// 	widget.NewButtonWithIcon("Xeoma", assets.GetIcon("xeoma.jpg"), func() {
+	// 		log.Println("click Xeoma")
+	// 	}),
+	// 	widget.NewButtonWithIcon("Firefox", assets.GetIcon("Firefox.png"), func() {
+	// 		log.Println("click firefox")
+	// 	}),
+	// }
+
+	grid := container.New(layout.NewAdaptiveGridLayout(3), buttons[0], buttons[1], buttons[2], buttons[3], buttons[4])
 	currentFocus := 0
 	buttons[currentFocus].FocusGained()
 
@@ -67,10 +85,7 @@ func main() {
 		case fyne.KeyDown:
 			tmpCur := currentFocus
 			currentFocus = (currentFocus + 3) % len(buttons)
-			fmt.Println(currentFocus)
 			if currentFocus <= 2 {
-				fmt.Println("l: ", (len(buttons)-currentFocus)%len(buttons))
-				fmt.Println("but: ", len(buttons), "curr: ", currentFocus)
 				buttons[(tmpCur % len(buttons))].FocusLost()
 				buttons[currentFocus].FocusGained()
 			} else {
@@ -82,7 +97,7 @@ func main() {
 		}
 	})
 
-	//vBox := container.New(layout.NewVBoxLayout(), grid)
+	//vBox := container.NewVBox(grid)
 	w.SetContent(grid)
 	w.ShowAndRun()
 
