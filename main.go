@@ -1,8 +1,10 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"myBoard/assets"
+	"os"
+	"os/exec"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -18,23 +20,60 @@ func main() {
 
 	buttons := []*widget.Button{
 		widget.NewButtonWithIcon("Youtube", assets.GetIcon("youtube.svg"), func() {
-			log.Println("click Youtube")
+			cmd := exec.Command("bash", "-c", "youtube-tv-client & exit")
+			_, err := cmd.Output()
+			if err != nil {
+				fmt.Printf("Ошибка: %v\n", err)
+				return
+			}
 		}),
 		widget.NewButtonWithIcon("Plex", assets.GetIcon("plex.svg"), func() {
-			log.Println("click Plex")
+			cmd := exec.Command("bash", "-c", "plex-htpc & exit")
+			_, err := cmd.Output()
+			if err != nil {
+				fmt.Printf("Ошибка: %v\n", err)
+				return
+			}
 		}),
 		widget.NewButtonWithIcon("Yandex music", assets.GetIcon("yandex_music.svg"), func() {
-			log.Println("click Yandex music")
+			cmd := exec.Command("bash", "-c", "yandex-music & exit")
+			_, err := cmd.Output()
+			if err != nil {
+				fmt.Printf("Ошибка: %v\n", err)
+				return
+			}
 		}),
 		widget.NewButtonWithIcon("Xeoma", assets.GetIcon("xeoma.jpg"), func() {
-			log.Println("click Xeoma")
+			homeDir, err := os.UserHomeDir()
+			if err != nil {
+				fmt.Printf("Ошибка получения домашней директории: %v\n", err)
+				return
+			}
+			fmt.Println(homeDir)
+			cmd := exec.Command(homeDir + "/bin/Xeoma/xeoma")
+			_, err = cmd.Output()
+			if err != nil {
+				fmt.Printf("Ошибка: %v\n", err)
+				return
+			}
+
 		}),
 		widget.NewButtonWithIcon("Firefox", assets.GetIcon("Firefox.png"), func() {
-			log.Println("click firefox")
+			cmd := exec.Command("bash", "-c", "firefox & exit")
+			_, err := cmd.Output()
+			if err != nil {
+				fmt.Printf("Ошибка: %v\n", err)
+				return
+			}
 		}),
-		// widget.NewButtonWithIcon("", assets.GetIcon("youtube.svg"), func() {
-		// 	log.Println("click Youtube")
-		// }),
+		widget.NewButtonWithIcon("Выключение", assets.GetIcon("poweroff.png"), func() {
+			cmd := exec.Command("bash", "-c", "poweroff")
+			_, err := cmd.Output()
+			if err != nil {
+				fmt.Printf("Ошибка: %v\n", err)
+				return
+			}
+		}),
 	}
 
 	// buttons := []fyne.CanvasObject{
@@ -55,7 +94,7 @@ func main() {
 	// 	}),
 	// }
 
-	grid := container.New(layout.NewAdaptiveGridLayout(3), buttons[0], buttons[1], buttons[2], buttons[3], buttons[4])
+	grid := container.New(layout.NewAdaptiveGridLayout(3), buttons[0], buttons[1], buttons[2], buttons[3], buttons[4], buttons[5])
 	currentFocus := 0
 	buttons[currentFocus].FocusGained()
 
@@ -97,7 +136,7 @@ func main() {
 		}
 	})
 
-	//vBox := container.NewVBox(grid)
+	//vBox := container.NewHBox(buttons[0], buttons[1], buttons[2], buttons[3], buttons[4])
 	w.SetContent(grid)
 	w.ShowAndRun()
 
